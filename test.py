@@ -1,7 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Snake Tutorial Python
+# Snake Tutorial Python - this is the code that im inspired of.
+# I was made by Tim from Tech With Tim yt channel. ( https://techwithtim.net )
 
 import math
 import random

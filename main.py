@@ -32,6 +32,8 @@ def draw_grid(surface, window_size: int, rows: int) -> None:
 
 
 def ref_scrn(surface, window_size, rows) -> None:
+    # Funkcja jest odpowiedzialna za odświeżanie ekranu.
+    # todo - Probably it will be responsible for rendering the snake and his food. But i need to figure it out
     surface.fill((0, 0, 0))
     draw_grid(surface, window_size, rows)
     pygame.display.update()
@@ -43,12 +45,6 @@ def main():
     screen = pygame.display.set_mode((window_size, window_size))
 
     while True:
-
-
-
-
-
-        
 
         ref_scrn(screen, window_size, rows)
 
