@@ -4,6 +4,7 @@
 import pygame
 import random
 
+
 class Cube:
     rows = 20
     width = 500
@@ -20,7 +21,7 @@ class Cube:
 
         self.pos = (self.pos[0] + self.dirx, self.pos[1] + self.diry)
 
-    def draw(self, surface): #todo Tutaj skończyłem - poradnik chyba nr 2 czyli rysowanie klocka
+    def draw(self, surface): # This function draws a given block
         size = self.width // self.rows
         i = self.pos[0]
         j = self.pos[1]
@@ -51,23 +52,27 @@ class Snake:
 
         for key in keys:
             if keys[pygame.K_RIGHT]:
-                self.dirx = 1
+                if self.head.dirx == -1 and len(self.body) > 1: break # This line makes impossible to press button in opposite durection
+                self.dirx = 1                                         # for example if we ale moving rihgt aut next move can't be left
                 self.diry = 0
                 self.turns[self.head.pos[:]] = [self.dirx, self.diry]
 
             elif keys[pygame.K_LEFT]:
+                if self.head.dirx == 1 and len(self.body) > 1: break
                 self.dirx = -1
                 self.diry = 0
                 self.turns[self.head.pos[:]] = [self.dirx, self.diry]
 
 
             elif keys[pygame.K_UP]:
+                if self.head.diry == 1 and len(self.body) > 1: break
                 self.dirx = 0
                 self.diry = -1
                 self.turns[self.head.pos[:]] = [self.dirx, self.diry]
 
 
             elif keys[pygame.K_DOWN]:
+                if self.head.diry == -1 and len(self.body) > 1: break
                 self.dirx = 0
                 self.diry = 1
                 self.turns[self.head.pos[:]] = [self.dirx, self.diry]
@@ -88,7 +93,6 @@ class Snake:
                 elif cube.dirx == -1 and cube.pos[0] <= 0: cube.pos = (cube.rows - 1, cube.pos[1])
                 elif cube.diry == 1 and cube.pos[1] >= (cube.rows - 1): cube.pos = (cube.pos[0], 0)
                 elif cube.diry == -1 and cube.pos[1] <= 0: cube.pos = (cube.pos[0], cube.rows - 1)
-                #todo cos tutaj się gliczuje
                 else: cube.move(cube.dirx, cube.diry) # If nothing happen we move in the current direction
 
 
@@ -97,6 +101,7 @@ class Snake:
         tail = self.body[-1]
         dx = tail.dirx
         dy = tail.diry
+        # Coordinates of next cube depends on durection whih we are moving. So we have to check four cases
 
         if dx == 1 and dy == 0:
             self.body.append(Cube((tail.pos[0] - 1, tail.pos[1])))
@@ -107,7 +112,7 @@ class Snake:
         elif dx == 0 and dy == -1:
             self.body.append(Cube((tail.pos[0], tail.pos[1] + 1)))
 
-        self.body[-1].dirx = dx
+        self.body[-1].dirx = dx # we are giving the direction to new added cube
         self.body[-1].diry = dy
 
 
@@ -115,7 +120,7 @@ class Snake:
         for i, cube in enumerate(self.body):
             cube.draw(surface)
 
-    def reset(self):
+    def reset(self): # resets snake so we can start again
         self.head = Cube((10,10))
         self.body = []
         self.body.append(self.head)
@@ -124,8 +129,9 @@ class Snake:
         self.diry = -1
 
 
-def random_food(rows, item):
-    positions = item.body
+def random_food(rows: int, item) -> tuple: # Returns random coordinates after checking if it's not a snake
+    #todo - jak grałem to chyba pojawiały się na weżu więc trzeba sprawdzić czy to na pewno dobrze działa
+    positions = item.body[:]
 
     while True:
         x = random.randrange(rows)
@@ -156,8 +162,7 @@ def draw_grid(surface, window_size: int, rows: int) -> None:
 
 
 def ref_scrn(surface, window_size, rows, snake, food) -> None:
-    # Funkcja jest odpowiedzialna za odświeżanie ekranu.
-    # todo - Probably it will be responsible for rendering the snake and his food. But i need to figure it out
+    # Rendering the screen - drawing food, snake and grid.
     surface.fill((0, 0, 0))
     snake.draw(surface)
     food.draw(surface)
@@ -166,7 +171,7 @@ def ref_scrn(surface, window_size, rows, snake, food) -> None:
 
 
 def main():
-    window_size = 500   #It's going to be square all the time
+    window_size = 500   #It's going to be square so one parameter is given
     rows = 20
     start = (10, 10)
     screen = pygame.display.set_mode((window_size, window_size))
@@ -178,14 +183,15 @@ def main():
     clock = pygame.time.Clock()
     # Game loop
     while 1:
-        clock.tick(13)
+        pygame.time.delay(50)
+        clock.tick(10)
 
         snake.move()
-        if snake.head.pos == food.pos:
+        if snake.head.pos == food.pos: # Checking if we ate the snack, extending the snake, and make another food
             snake.add_cube()
             food = Cube(random_food(rows, snake), color=(0, 255, 0))
 
-        for i, cube in enumerate(snake.body):
+        for i, cube in enumerate(snake.body): # Here we are checking if the user ate the snake and ending the game
           if snake.head.pos == cube.pos and i > 0:
               pygame.time.delay(1000)
               snake.reset()
