@@ -257,7 +257,7 @@ def main():
     draw_text(screen, "Snake Pro I", 80, 20, 100)
 
     # Making game button object
-    game_button = Button(125, 250, 250, 70,color=(0, 0, 255), text="Game", text_color=(255, 255, 255))
+    game_button = Button(125, 250, 250, 70, color=(0, 0, 255), text="Game", text_color=(255, 255, 255))
     game_button.draw(screen, font_size=60, outline=(255, 255, 0))
 
     # Making LEVEL BUTTONS
@@ -308,7 +308,7 @@ def main():
                         if event_page_2.type == pygame.MOUSEMOTION:
 
                             level_button_easy.change_color_when_over((0, 0, 255), (140, 140, 140), screen,
-                                                                     font_size=60,outline=(255, 255, 0))
+                                                                     font_size=60, outline=(255, 255, 0))
 
                             level_button_medium.change_color_when_over((0, 0, 255), (140, 140, 140), screen,
                                                                        font_size=60, outline=(255, 255, 0))
