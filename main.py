@@ -219,7 +219,7 @@ def draw_text(screen, text, size, x, y):  # Draws the text on the screen
     screen.blit(scrn_text, (x, y))
 
 
-def game(screen):
+def game(screen, tick):
     window_size = 500   # It's going to be square so one parameter is given
     rows = 20
     start = (10, 10)
@@ -232,7 +232,7 @@ def game(screen):
 
     while running:
         pygame.time.delay(50)
-        clock.tick(10)
+        clock.tick(tick)
 
         snake.move()
         if snake.head.pos == food.pos:  # Checking if we ate the snack, extending the snake, and make another food
@@ -294,15 +294,15 @@ def main():
 
                         # Starts the game on EASY mode
                         if event_page_2.type == pygame.MOUSEBUTTONDOWN and level_button_easy.isOver():
-                            game(screen)
+                            game(screen, 10)
 
                         # Starts the game on MEDIUM mode
                         if event_page_2.type == pygame.MOUSEBUTTONDOWN and level_button_medium.isOver():
-                            game(screen)
+                            game(screen, 13)
 
                         # # Starts the game on HARD mode
                         if event_page_2.type == pygame.MOUSEBUTTONDOWN and level_button_hard.isOver():
-                            game(screen)
+                            game(screen, 15)
 
                         # Check if cursor is over the button. If it is it changes the color of the rectangle
                         if event_page_2.type == pygame.MOUSEMOTION:
